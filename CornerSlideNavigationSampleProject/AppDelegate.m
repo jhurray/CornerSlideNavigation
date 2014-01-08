@@ -15,10 +15,9 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor redColor];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
+    
     MainViewController *mVC = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
     [self.window setRootViewController:[[UINavigationController alloc] initWithRootViewController:mVC]];
     

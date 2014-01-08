@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "TriangleView.h"
 
-
+@class CornerSlideNavigationView;
 @protocol CornerSlideNavigationDelegate <NSObject>
 
 @optional
 -(void)triangleButtonTouched:(TriangleView *)triangleView;
+-(void)cornersHidden:(CornerSlideNavigationView *)cornerSlideNavView;
 
 @end
 

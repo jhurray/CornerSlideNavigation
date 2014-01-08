@@ -30,16 +30,20 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
     [self.navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
     [self.navigationController setNavigationBarHidden:YES];
     
     label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, DEVICEWIDTH, DEVICEHEIGHT/5)];
-    [label setText:@"Hello World!"];
+    [label setText:@"Swipe Down and left from the top right corner."];
     [label setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label];
     
-    navView = [[CornerSlideNavigationView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWIDTH, DEVICEHEIGHT) withStatusBar:YES withNavBar:!self.navigationController.navigationBarHidden];
+    BOOL navBarHidden = self.navigationController.navigationBarHidden;
+    BOOL statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+    navView = [[CornerSlideNavigationView alloc] initWithFrame:CGRectMake(0, 0, DEVICEWIDTH, DEVICEHEIGHT) withStatusBar:!statusBarHidden withNavBar:!navBarHidden];
     navView.delegate = self;
     [self.view addSubview:navView];
     
@@ -50,6 +54,16 @@
 -(void)triangleButtonTouched:(TriangleView *)triangleView{
     
     [label setText:[NSString stringWithFormat:@"Triangle button #%lu touched!!", triangleView.tag]];
+}
+
+-(void)cornersHidden:(CornerSlideNavigationView *)cornerSlideNavView{
+    
+    if(!navView.visible){
+        [label setText:@"Corner Slide Nav hidden."];
+    }
+    else{
+        [label setText:@"Corner Slide Nav visible."];
+    }
 }
 
 -(void)showOrHideCorners{

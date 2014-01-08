@@ -141,15 +141,19 @@ static int heightOffset;
                     [t2 setFrame:CGRectMake(t2InOrigin.x, t2InOrigin.y, T_SIZE, T_SIZE)];
                     [t3 setFrame:CGRectMake(t3InOrigin.x, t3InOrigin.y, T_SIZE, T_SIZE)];
                     [recognizer.view setFrame:CGRectMake(desiredOriginIn.x, desiredOriginIn.y, recognizer.view.frame.size.width, recognizer.view.frame.size.height)];
+                    self.visible = FALSE;
                 }
                 else{ // going OUT
                     [t1 setFrame:CGRectMake(t1OutOrigin.x, t1OutOrigin.y, T_SIZE, T_SIZE)];
                     [t2 setFrame:CGRectMake(t2OutOrigin.x, t2OutOrigin.y, T_SIZE, T_SIZE)];
                     [t3 setFrame:CGRectMake(t3OutOrigin.x, t3OutOrigin.y, T_SIZE, T_SIZE)];
                     [recognizer.view setFrame:CGRectMake(desiredOriginOut.x, desiredOriginOut.y, recognizer.view.frame.size.width, recognizer.view.frame.size.height)];
+                    self.visible = TRUE;
                 }
                 
-            } completion:nil];
+            } completion:^(BOOL finished) {
+                [self.delegate cornersHidden:self];
+            }];
         }
         //go in
         else if (velocity.x >=0 && velocity.y <=0){
@@ -159,7 +163,10 @@ static int heightOffset;
                 [t3 setFrame:CGRectMake(t3InOrigin.x, t3InOrigin.y, T_SIZE, T_SIZE)];
                 [recognizer.view setFrame:CGRectMake(desiredOriginIn.x, desiredOriginIn.y, recognizer.view.frame.size.width, recognizer.view.frame.size.height)];
                 
-            } completion:nil];
+            } completion:^(BOOL finished){
+                visible = FALSE;
+                [delegate cornersHidden:self];
+            }];
         }
         
         NSLog(@"\n\nENDED\n");
