@@ -11,7 +11,7 @@
 #define T_SIZE DEVICEWIDTH/3
 #define SHEETALPHA 0.5
 #define NAVALPHA 0.7
-#define SHEET_COLOR [UIColor darkGrayColor]
+#define SHEET_COLOR [UIColor grayColor]
 #define TOPRIGHTOFFSET 60
 #define TOPRIGHTRATIOSHOWN 0.4
 
@@ -84,7 +84,11 @@ static int heightOffset;
     
     if(recognizer.state == UIGestureRecognizerStateBegan){
         
-        
+        [backgroundSheet setAlpha:0];
+        if(![self.subviews containsObject:backgroundSheet]){
+            [self addSubview:backgroundSheet];
+            [self sendSubviewToBack:backgroundSheet];
+        }
         NSLog(@"\n\nBEGAN\n");
     }
     else if(recognizer.state == UIGestureRecognizerStateChanged){
@@ -103,12 +107,14 @@ static int heightOffset;
 
             [recognizer.view setFrame:CGRectMake(MAX(desiredOriginOut.x, recognizer.view.frame.origin.x-translationValOut), MIN(desiredOriginOut.y, recognizer.view.frame.origin.y+translationValOut), recognizer.view.frame.size.width, recognizer.view.frame.size.height)];
             [self handlePanForOtherTrianglesWithRatio:outRatio movingOut:YES];
+            backgroundSheet.alpha+=MIN(outRatio*SHEETALPHA, SHEETALPHA-backgroundSheet.alpha);
 
         }
         else if(translation.x >= 0 && translation.y <= 0 && recognizer.view.frame.origin.x < desiredOriginIn.x){
             
             [recognizer.view setFrame:CGRectMake(MIN(desiredOriginIn.x, recognizer.view.frame.origin.x+translationValIn), MAX(desiredOriginIn.y, recognizer.view.frame.origin.y-translationValIn), recognizer.view.frame.size.width, recognizer.view.frame.size.height)];
             [self handlePanForOtherTrianglesWithRatio:inRatio movingOut:NO];
+            backgroundSheet.alpha-=MIN(inRatio*SHEETALPHA, backgroundSheet.alpha);
         }
         
         [recognizer setTranslation:CGPointMake(0, 0) inView:self];
@@ -117,9 +123,6 @@ static int heightOffset;
     else if(recognizer.state == UIGestureRecognizerStateEnded){
         
         CGPoint velocity = [recognizer velocityInView:self];
-        CGFloat magnitude = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
-        CGFloat slideMult = magnitude / 200;
-        NSLog(@"magnitude: %f, slideMult: %f", magnitude, slideMult);
         TriangleView *t1 = [triangles objectAtIndex:0];
         TriangleView *t2 = [triangles objectAtIndex:1];
         TriangleView *t3 = [triangles objectAtIndex:2];
@@ -131,12 +134,11 @@ static int heightOffset;
         CGPoint t3OutOrigin = CGPointMake(0, heightOffset);
         CGPoint t3InOrigin = CGPointMake(-T_SIZE, heightOffset-T_SIZE);
         
-        float slideFactor = 0.1 * slideMult; // Increase for more of a slide
-        
         if(velocity.x <=0 && velocity.y >=0 ){
-            [UIView animateWithDuration:slideFactor*2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                if([self distanceBetween:recognizer.view.frame.origin and:desiredOriginOut] >= [self distanceBetween:recognizer.view.frame.origin and:desiredOriginIn]){
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                if([self distanceBetween:recognizer.view.frame.origin and:desiredOriginOut] >= 1.25*[self distanceBetween:recognizer.view.frame.origin and:desiredOriginIn]){
                     //going  IN
+                    [backgroundSheet setAlpha:0];
                     [t1 setFrame:CGRectMake(t1InOrigin.x, t1InOrigin.y, T_SIZE, T_SIZE)];
                     [t2 setFrame:CGRectMake(t2InOrigin.x, t2InOrigin.y, T_SIZE, T_SIZE)];
                     [t3 setFrame:CGRectMake(t3InOrigin.x, t3InOrigin.y, T_SIZE, T_SIZE)];
@@ -144,6 +146,7 @@ static int heightOffset;
                     self.visible = FALSE;
                 }
                 else{ // going OUT
+                    [backgroundSheet setAlpha:SHEETALPHA];
                     [t1 setFrame:CGRectMake(t1OutOrigin.x, t1OutOrigin.y, T_SIZE, T_SIZE)];
                     [t2 setFrame:CGRectMake(t2OutOrigin.x, t2OutOrigin.y, T_SIZE, T_SIZE)];
                     [t3 setFrame:CGRectMake(t3OutOrigin.x, t3OutOrigin.y, T_SIZE, T_SIZE)];
@@ -157,7 +160,8 @@ static int heightOffset;
         }
         //go in
         else if (velocity.x >=0 && velocity.y <=0){
-            [UIView animateWithDuration:slideFactor*2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [UIView animateWithDuration:0.4 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                [backgroundSheet setAlpha:0];
                 [t1 setFrame:CGRectMake(t1InOrigin.x, t1InOrigin.y, T_SIZE, T_SIZE)];
                 [t2 setFrame:CGRectMake(t2InOrigin.x, t2InOrigin.y, T_SIZE, T_SIZE)];
                 [t3 setFrame:CGRectMake(t3InOrigin.x, t3InOrigin.y, T_SIZE, T_SIZE)];
@@ -166,6 +170,7 @@ static int heightOffset;
             } completion:^(BOOL finished){
                 visible = FALSE;
                 [delegate cornersHidden:self];
+                [backgroundSheet removeFromSuperview];
             }];
         }
         
@@ -224,6 +229,7 @@ static int heightOffset;
                          completion:^(BOOL finished) {
                              visible = FALSE;
                              [backgroundSheet removeFromSuperview];
+                             [delegate cornersHidden:self];
                          }];
         
     }
@@ -243,6 +249,7 @@ static int heightOffset;
                          }
                          completion:^(BOOL finished) {
                              visible = TRUE;
+                             [delegate cornersHidden:self];
                          }];
         
     }
