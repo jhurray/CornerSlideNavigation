@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>EC6CD37C-5359-45D1-B40F-D5003C713C10</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CornerSlideNavigationSampleProject</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>6F2E94B8-63AB-44FD-9C6C-6D0C967477BE</key>
+		<string>https://github.com/jhurray/CornerSlideNavigation.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CornerSlideNavigationSampleProject.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>6F2E94B8-63AB-44FD-9C6C-6D0C967477BE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jhurray/CornerSlideNavigation.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>6F2E94B8-63AB-44FD-9C6C-6D0C967477BE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6F2E94B8-63AB-44FD-9C6C-6D0C967477BE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CornerSlideNavigation</string>
+		</dict>
+	</array>
+</dict>
+</plist>
